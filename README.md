@@ -33,6 +33,7 @@ Rather than following tutorials passively, every lab in this repo was:
 | [Day 2](./day-02-privesc-lab.md) | CloudTrail & Privilege Escalation | Audit logging, IAM attack simulation, CloudTrail forensic analysis, remediation |
 | [Day 3](./day-03-iam-groups-and-roles.md) | IAM Groups, Roles & Log Forensics | Group-based access control, service-assumable roles, manual CloudTrail analysis |
 | [Day 4](./day-04-s3-bucket-security.md) | S3 Bucket Security | Public access misconfiguration, bucket policies, defense-in-depth |
+| 05 | [VPC Networking & Security Groups](./day-05-vpc-networking-security.md) | Network segmentation, security group hardening, least-exposure principle |  
 
 (Repository updated as training progresses)
 
