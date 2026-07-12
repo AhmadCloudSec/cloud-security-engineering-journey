@@ -27,14 +27,14 @@ Rather than following tutorials passively, every lab in this repo was:
 
 📂 Training Log
 
-| Day | Topic | Key Skills Demonstrated |
-|-----|-------|--------------------------|
-| [Day 1](./day-01-account-setup.md) | AWS Account Hardening | Root account MFA, billing alarm automation, IAM least-privilege foundations |
-| [Day 2](./day-02-privesc-lab.md) | CloudTrail & Privilege Escalation | Audit logging, IAM attack simulation, CloudTrail forensic analysis, remediation |
-| [Day 3](./day-03-iam-groups-and-roles.md) | IAM Groups, Roles & Log Forensics | Group-based access control, service-assumable roles, manual CloudTrail analysis |
-| [Day 4](./day-04-s3-bucket-security.md) | S3 Bucket Security | Public access misconfiguration, bucket policies, defense-in-depth |
-| 05 | [VPC Networking & Security Groups](./day-05-vpc-networking-security.md) | Network segmentation, security group hardening, least-exposure principle |  
-| 06 | [EC2 & IAM Role Integration](./day-06-ec2-iam-role-integration.md) | Credential-less compute access, live IAM role verification, least-privilege testing | ✅ Complete |
+| Day | Topic | Key Skills Demonstrated | Status |
+|-----|-------|--------------------------|--------|
+| [Day 1](./day-01-account-setup.md) | AWS Account Hardening | Root account MFA, billing alarm automation, IAM least-privilege foundations | ✅ Complete |
+| [Day 2](./day-02-privesc-lab.md) | CloudTrail & Privilege Escalation | Audit logging, IAM attack simulation, CloudTrail forensic analysis, remediation | ✅ Complete |
+| [Day 3](./day-03-iam-groups-and-roles.md) | IAM Groups, Roles & Log Forensics | Group-based access control, service-assumable roles, manual CloudTrail analysis | ✅ Complete |
+| [Day 4](./day-04-s3-bucket-security.md) | S3 Bucket Security | Public access misconfiguration, bucket policies, defense-in-depth | ✅ Complete |
+| [Day 5](./day-05-vpc-networking-security.md) | VPC Networking & Security Groups | Network segmentation, security group hardening, least-exposure principle | ✅ Complete |
+| [Day 6](./day-06-ec2-iam-role-integration.md) | EC2 & IAM Role Integration | Credential-less compute access, live IAM role verification, least-privilege testing | ✅ Complete |
 (Repository updated as training progresses)
 
 🛠️ Tools & Technologies
