@@ -42,3 +42,43 @@ snapshots, reducing storage cost.
 **Recovery Workflow** — If a volume is lost or corrupted, a new volume 
 can be created directly from a snapshot, restoring data to the exact 
 state at the time the snapshot was taken.
+
+## ✅ Implementation
+
+### 1. Provisioned a Standalone EBS Volume
+- Created a 1 GiB `gp3` volume independent of any EC2 instance, to 
+  isolate the storage lifecycle from compute for this demonstration
+
+### 2. Created a Snapshot
+- Initiated snapshot creation from the volume via **Actions → Create 
+  snapshot**
+- Observed snapshot progress transition from in-progress (`Pending`, 
+  99%) to `Completed`
+
+### 3. Cleanup
+- Deleted the snapshot
+- Deleted the underlying volume
+
+## 📌 Key Takeaway
+
+> EBS volumes are not implicitly backed up — a deliberate snapshot 
+> strategy is required for recoverability. Combined with the earlier 
+> observation that EC2 termination can optionally preserve or delete 
+> attached volumes, a complete backup strategy requires explicitly 
+> managing both volume persistence (`Delete on Termination`) and 
+> scheduled snapshot creation, rather than assuming either happens 
+> automatically.
+
+## 🌍 Real-World Relevance
+
+Production environments typically automate snapshot creation on a 
+schedule (e.g., via AWS Backup or Data Lifecycle Manager) rather than 
+relying on manual snapshots, ensuring consistent recovery points exist 
+without requiring an operator to remember to create them.
+
+## 🔗 References
+- AWS Documentation — *Amazon EBS Volumes*
+- AWS Documentation — *Amazon EBS Snapshots*
+
+---
+*Previous: [← Day 10 — RDS Database Security](./day-10-rds-database-security.md)*
