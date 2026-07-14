@@ -37,6 +37,7 @@ Rather than following tutorials passively, every lab in this repo was:
 | [Day 6](./day-06-ec2-iam-role-integration.md) | EC2 & IAM Role Integration | Credential-less compute access, live IAM role verification, least-privilege testing | ✅ Complete |
 | [Day 7](./day-07-vpc-routing-deep-dive.md) | VPC Routing Deep Dive | Internet Gateway/Route Table mechanics, public vs private subnet verification | ✅ Complete |
 | [Day 8](./day-08-secrets-manager.md) | Secrets Manager | Credential-less secrets storage, encrypted retrieval, safe deletion practices | ✅ Complete |
+| [Day 9](./day-09-kms-encryption.md) | KMS Encryption | Customer-managed keys, envelope encryption, encrypt/decrypt lifecycle verification | ✅ Complete |
 (Repository updated as training progresses)
 
 🛠️ Tools & Technologies
