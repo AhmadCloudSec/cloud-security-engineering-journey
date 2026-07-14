@@ -39,6 +39,7 @@ Rather than following tutorials passively, every lab in this repo was:
 | [Day 8](./day-08-secrets-manager.md) | Secrets Manager | Credential-less secrets storage, encrypted retrieval, safe deletion practices | ✅ Complete |
 | [Day 9](./day-09-kms-encryption.md) | KMS Encryption | Customer-managed keys, envelope encryption, encrypt/decrypt lifecycle verification | ✅ Complete |
 | [Day 10](./day-10-rds-database-security.md) | RDS Database Security | Managed database provisioning, network isolation verification, defense-in-depth | ✅ Complete |
+| [Day 11](./day-11-ebs-snapshots.md) | EBS Volumes & Snapshots | Persistent storage independence, point-in-time backup, recovery workflow | ✅ Complete |
 (Repository updated as training progresses)
 
 🛠️ Tools & Technologies
