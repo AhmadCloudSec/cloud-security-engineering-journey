@@ -42,6 +42,7 @@ Rather than following tutorials passively, every lab in this repo was:
 | [Day 11](./day-11-ebs-snapshots.md) | EBS Volumes & Snapshots | Persistent storage independence, point-in-time backup, recovery workflow | ✅ Complete |
 | [Day 12](./day-12-aws-config.md) | AWS Config | Configuration history tracking, compliance evaluation model, Config Rules concept | ✅ Complete |
 | [Day 13](./day-13-aws-organizations.md) | AWS Organizations | Multi-account governance, Service Control Policies, permission ceiling model | ✅ Complete |
+| [Day 14](./day-14-guardduty-threat-detection.md) | GuardDuty Threat Detection | Automated ML-based detection, finding analysis, behavioral anomaly concepts | ✅ Complete |
 (Repository updated as training progresses)
 
 🛠️ Tools & Technologies
