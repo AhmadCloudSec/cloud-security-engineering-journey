@@ -44,6 +44,7 @@ Rather than following tutorials passively, every lab in this repo was:
 | [Day 13](./day-13-aws-organizations.md) | AWS Organizations | Multi-account governance, Service Control Policies, permission ceiling model | ✅ Complete |
 | [Day 14](./day-14-guardduty-threat-detection.md) | GuardDuty Threat Detection | Automated ML-based detection, finding analysis, behavioral anomaly concepts | ✅ Complete |
 | [Day 15](./day-15-abac-least-privilege.md) | Least Privilege, RBAC & ABAC | Access control models, ABAC policy implementation, systematic policy debugging | ✅ Complete |
+| [Day 16](./day-16-iam-identity-center-sso.md) | IAM Identity Center (SSO) | Identity federation, multi-account access, permission sets | ✅ Complete |
 (Repository updated as training progresses)
 
 🛠️ Tools & Technologies
