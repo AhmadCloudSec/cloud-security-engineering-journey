@@ -48,6 +48,7 @@ Rather than following tutorials passively, every lab in this repo was:
 | [Day 17](./day-17-waf-alb-security-lab.md) | WAF & Load Balancer Security | Multi-AZ architecture, Layer 7 protection, real attack simulation, systematic troubleshooting | ✅ Complete |
 | [Day 18](./day-18-zero-trust-architecture.md) | Zero Trust Architecture | Security philosophy, retrospective control mapping, defense-in-depth synthesis | ✅ Complete |
 | [Day 19](./day-19-dns-security-route53.md) | DNS Security & Route 53 | DNS attack vectors, DNSSEC, weighted routing, layered defense analysis | ✅ Complete |
+| [Day 20](./day-20-api-gateway-security.md) | API Gateway Security | API Key auth, IAM authorization, rate limiting, systematic auth-layer debugging | ✅ Complete |
 (Repository updated as training progresses)
 
 🛠️ Tools & Technologies
