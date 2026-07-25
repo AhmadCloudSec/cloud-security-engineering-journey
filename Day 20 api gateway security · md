@@ -1,0 +1,245 @@
+# Day 20 — API Gateway Security
+
+`Difficulty: Hands-On` · `Focus Area: API Authentication, Authorization, Rate Limiting, Auth-Layer Debugging`
+
+---
+
+## 🎯 Objective
+
+Secure a REST API using AWS API Gateway's layered authentication and 
+authorization controls, implement rate limiting via Usage Plans, and — 
+critically — work through a real multi-layer authentication failure to 
+understand how API Gateway's auth stack actually behaves under 
+misconfiguration, rather than only under ideal conditions.
+
+## 🧩 Environment
+
+| | |
+|---|---|
+| **Platform** | AWS Free Tier |
+| **Service** | Amazon API Gateway (REST API) |
+| **Scope** | Live API deployed with Mock integration, API Key auth, IAM authorization testing |
+
+## 📋 Problem Statement
+
+Exposing a backend service (Lambda, EC2, or any compute target) 
+directly to the internet without an intermediary layer means every 
+request — authenticated or not, well-formed or not, rate-limited or 
+not — reaches application logic unfiltered. API Gateway sits in front 
+of the backend specifically to enforce identity checks, throttle abuse, 
+and validate structure before a request is allowed through — the same 
+principle applied to HTTP traffic via WAF in Day 17, applied instead at 
+the API contract level.
+
+## 🧠 Core Concepts
+
+### The Request Lifecycle Through API Gateway
+
+A request passing through a secured API Gateway is evaluated in a 
+specific order, each layer capable of rejecting it before the next is 
+ever reached:
+
+```
+Client Request
+      │
+      ▼
+┌─────────────────┐
+│  Authorization    │  (AWS_IAM / Lambda Authorizer / Cognito / NONE)
+└────────┬─────────┘
+         ▼
+┌─────────────────┐
+│  API Key Check    │  (if required on the method)
+└────────┬─────────┘
+         ▼
+┌─────────────────┐
+│  Usage Plan /      │  (rate limiting, quota)
+│  Throttling         │
+└────────┬─────────┘
+         ▼
+┌─────────────────┐
+│  Request Validator │  (schema / body validation, if configured)
+└────────┬─────────┘
+         ▼
+   Backend Integration
+   (Lambda / HTTP / Mock)
+```
+
+A request can fail at any layer, and each layer produces a **distinct** 
+error — understanding which layer produced a given error is the core 
+diagnostic skill this lab was built to develop.
+
+### Authentication vs. Authorization vs. Rate Limiting
+
+These three controls are frequently conflated but serve entirely 
+different purposes:
+
+| Control | Question It Answers | AWS Mechanism |
+|---|---|---|
+| **Authentication** | Who is making this request? | API Key, Cognito User Pool, custom identity token |
+| **Authorization** | Is this identity allowed to call this specific method? | `AWS_IAM`, Lambda Authorizer, Cognito Authorizer |
+| **Rate Limiting** | Is this identity calling too frequently? | Usage Plans (rate + burst + quota) |
+
+A method can have **no** authentication, **IAM** authorization, and a 
+Usage Plan simultaneously — each is configured and evaluated 
+independently, which is precisely what made the misconfiguration in 
+this lab non-obvious at first.
+
+### Rate Limiting Mechanics
+
+Usage Plans enforce two distinct limits:
+
+- **Rate** — sustained requests per second allowed
+- **Burst** — a token-bucket allowance for short spikes above the 
+  sustained rate before throttling begins
+- **Quota** — a hard cap over a longer window (e.g., 1,000 requests/day)
+
+This mirrors the throttling logic reviewed conceptually for WAF 
+rate-based rules in Day 17, applied here at the API method level 
+instead of the Layer 7 HTTP level.
+
+## ✅ Implementation
+
+### 1. Provisioned a REST API with a Mock Integration
+- Created `security-lab-api` with a `/test` resource and `GET` method
+- Used a **Mock** integration to isolate testing to the auth/routing 
+  layer, independent of any backend logic
+
+### 2. Configured API Key Authentication + Usage Plan
+- Created an API Key and a Usage Plan (`basic-plan`) with:
+  - Rate: 10 requests/second
+  - Burst: 20
+  - Quota: 1,000 requests/day
+- Associated the API Key with the Usage Plan and the Usage Plan with 
+  the deployed stage
+- Set **API Key Required: true** on the `GET /test` method
+
+### 3. Deployed to a Stage
+- Deployed the API to a stage named `test`
+- Confirmed the **Invoke URL** format requires both the stage and the 
+  resource path: 
+  `https://{api-id}.execute-api.{region}.amazonaws.com/{stage}/{resource}`
+
+## 🐛 Troubleshooting Log
+
+This section documents the actual debugging path for a real 
+authentication failure encountered during testing — not a 
+reconstructed "happy path."
+
+### Issue: Every request returned `{"message":"Missing Authentication Token"}`
+
+**First hypothesis — incorrect URL structure.**
+The initial request omitted the stage name, hitting `/test` instead of 
+`/test/test` (stage `test` + resource `/test`). Corrected the URL to 
+include both segments. Error persisted.
+
+**Second hypothesis — PowerShell's `curl` alias.**
+Windows PowerShell aliases `curl` to `Invoke-WebRequest`, which 
+formats errors differently and can obscure the actual HTTP response. 
+Switched to `curl.exe` explicitly to bypass the alias and get a true 
+`curl` response. Error persisted — ruling out a client-side formatting 
+issue.
+
+**Third hypothesis — resource path mismatch.**
+Reviewed the **Resources** tree directly in the console to confirm the 
+exact path and method binding (`/test` → `GET`), rather than assuming 
+from memory. Path was confirmed correct — ruling out a routing 
+mismatch.
+
+**Root cause identified — Authorization type mismatch.**
+Reviewing **Method Request settings** revealed `Authorization: AWS_IAM` 
+was set on the method — a leftover from initial method creation. 
+`AWS_IAM` authorization requires every request to be signed with AWS 
+Signature Version 4 (SigV4). A plain `curl` or browser request is 
+**never** SigV4-signed, so API Gateway rejected it before it ever 
+reached the API Key check — producing `"Missing Authentication Token"`, 
+a message that describes the *symptom* (no valid signed credential 
+found) rather than the *specific cause* (wrong authorizer type for an 
+unsigned client).
+
+**Fix:** Changed Authorization from `AWS_IAM` to `NONE`, keeping **API 
+Key Required: true** intact, then **redeployed the API** to the `test` 
+stage.
+
+**Secondary issue — stale result after the fix.**
+Immediately after redeploying, the same error still appeared. Rather 
+than assuming the fix was wrong, verified the **Stages** page directly: 
+the "Active deployment" timestamp confirmed the redeploy had in fact 
+registered. Re-tested with `curl.exe -v` (verbose mode) to inspect the 
+actual HTTP status code rather than relying on the JSON body alone — 
+this revealed the true response was already `403 Forbidden`, not 
+`"Missing Authentication Token"`, indicating the fix had taken effect 
+and the earlier repeated error had likely been a brief propagation 
+delay.
+
+**Final confirmation:**
+```
+< HTTP/1.1 403 Forbidden
+{"message":"Forbidden"}
+```
+This is the **correct and expected** result: Authorization now passes 
+(`NONE`), and the request is rejected specifically for a missing API 
+Key — exactly the control that was intended to be tested.
+
+## 🧠 Key Concepts Applied
+
+**Error Messages Describe Symptoms, Not Root Causes** — 
+`"Missing Authentication Token"` does not mean "you forgot your API 
+key." It means the request didn't match any configured 
+route/authorizer combination the way API Gateway expected — which, in 
+this case, meant a SigV4-signature was expected and never provided. 
+Diagnosing AWS error messages requires understanding what condition 
+they're actually reporting, not just pattern-matching the message text 
+to an assumed cause.
+
+**Configuration Changes Are Not Live Until Deployed** — Identical to 
+the lesson from Day 17's Security Group work, but at the API Gateway 
+layer: editing a method's settings in the console updates the 
+*definition*, not the *live stage*. A redeploy is a distinct, required 
+step.
+
+**Systematic Elimination Over Guessing** — The working diagnostic 
+order that resolved this issue was: **URL/path structure → client tool 
+behavior → resource/method binding → authorization configuration → 
+deployment status**. Each layer was verified independently rather than 
+changing multiple settings at once, which would have made it 
+impossible to isolate which change actually fixed the issue.
+
+**Distinguishing HTTP Status Codes from JSON Error Bodies** — Two 
+different failures (`AWS_IAM` mismatch vs. missing API Key) produced 
+JSON bodies that looked superficially similar in casual testing, but 
+`curl -v` revealed clearly distinct HTTP status codes underneath 
+(`403` in both cases here, but the *message* text and the *timing* — 
+before vs. after the Authorization fix — were what actually 
+disambiguated them). Relying on status codes and full response headers, 
+not just the message string, is the more reliable diagnostic signal.
+
+## 📌 Key Takeaway
+
+> A layered authentication stack (Authorization → API Key → Usage Plan 
+> → Validation) means a single misconfigured layer can produce an error 
+> message that appears to describe a completely different layer. 
+> Resolving `"Missing Authentication Token"` required checking the 
+> *authorization mechanism*, not the credential itself — the fix was 
+> never about supplying a missing token, but about removing an 
+> authorizer that expected a signing method the client was never using.
+
+## 🌍 Real-World Relevance
+
+Production APIs commonly layer multiple authorization mechanisms 
+(IAM for internal service-to-service calls, API Keys for partner 
+integrations, Cognito for end-user apps) on different methods of the 
+same API. Misconfigured authorizer types are a common source of 
+"working in one environment, broken in another" bugs — a method copied 
+from an internal (IAM-authorized) API to a public-facing one without 
+updating the authorization type will fail for every external client, 
+with an error message that does not obviously point to the actual 
+setting responsible.
+
+## 🔗 References
+- AWS Documentation — *Amazon API Gateway Developer Guide*
+- AWS Documentation — *Control access to a REST API with IAM permissions*
+- AWS Documentation — *Throttle API requests for better throughput*
+- AWS Documentation — *API Gateway REST API troubleshooting*
+
+---
+*Previous: [← Day 19 — DNS Security & Amazon Route 53](./day-19-dns-security-route53.md)*
