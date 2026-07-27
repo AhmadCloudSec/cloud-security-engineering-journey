@@ -1,0 +1,34 @@
+title: AWS IAM Privilege Escalation via CreatePolicyVersion
+id: 8f5c9a21-3b7e-4c1d-9e8f-1a2b3c4d5e6f
+status: experimental
+description: >
+  Detects when a principal creates a new policy version with 
+  overly permissive Action/Resource combinations, which may 
+  indicate privilege escalation activity.
+references:
+  - https://attack.mitre.org/techniques/T1548/
+author: Ahmad - Cloud Security Lab
+date: 2026/07/25
+tags:
+  - attack.privilege_escalation
+  - attack.t1548
+
+logsource:
+  product: aws
+  service: cloudtrail
+
+detection:
+  selection:
+    eventName: 'CreatePolicyVersion'
+    eventSource: 'iam.amazonaws.com'
+  suspicious_content:
+    requestParameters|contains:
+      - '"Action":"*"'
+      - '"Resource":"*"'
+  condition: selection and suspicious_content
+
+falsepositives:
+  - Legitimate administrative policy updates by authorized 
+    security/platform teams (should be rare and well-documented)
+
+level: high
