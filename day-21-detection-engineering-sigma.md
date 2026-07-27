@@ -1,4 +1,4 @@
-# Day 20 — Detection Engineering: Sigma Rules & MITRE ATT&CK
+# Day 21 — Detection Engineering: Sigma Rules & MITRE ATT&CK
 
 `Difficulty: Intermediate` · `Focus Area: Detection Logic, Threat Modeling`
 
@@ -144,4 +144,4 @@ undocumented, tribal knowledge inside a single SIEM console.
 - MITRE ATT&CK — *T1548: Abuse Elevation Control Mechanism*
 
 ---
-*Previous: [← Day 19 — DNS Security & Route 53](./day-19-dns-security-route53.md)*
+*Previous: [← Day 20 — Api gateway security](./day-20-api-gateway-security.md)*
