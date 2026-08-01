@@ -49,7 +49,8 @@ Rather than following tutorials passively, every lab in this repo was:
 | [Day 18](./day-18-zero-trust-architecture.md) | Zero Trust Architecture | Security philosophy, retrospective control mapping, defense-in-depth synthesis | ✅ Complete |
 | [Day 19](./day-19-dns-security-route53.md) | DNS Security & Route 53 | DNS attack vectors, DNSSEC, weighted routing, layered defense analysis | ✅ Complete |
 | [Day 20](./day-20-api-gateway-security.md) | API Gateway Security | API Key auth, IAM authorization, rate limiting, systematic auth-layer debugging | ✅ Complete |
-| [Day 20](./day-20-detection-engineering-sigma.md) | Detection Engineering (Sigma) | MITRE ATT&CK mapping, custom detection rule authorship, false-positive analysis | ✅ Complete |
+| [Day 21](./day-21-detection-engineering-sigma.md) | Detection Engineering (Sigma) | MITRE ATT&CK mapping, custom detection rule authorship, false-positive analysis | ✅ Complete |
+| [Day 22](./day-22-iac-security-terraform.md) | Infrastructure as Code Security (Terraform + Checkov) | Shift-left scanning, policy-as-code, S3 hardening, cross-region replication, IAM least-privilege for automation roles | ✅ Complete |
 (Repository updated as training progresses)
 
 🛠️ Tools & Technologies
