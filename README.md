@@ -51,6 +51,7 @@ Rather than following tutorials passively, every lab in this repo was:
 | [Day 20](./day-20-api-gateway-security.md) | API Gateway Security | API Key auth, IAM authorization, rate limiting, systematic auth-layer debugging | ✅ Complete |
 | [Day 21](./day-21-detection-engineering-sigma.md) | Detection Engineering (Sigma) | MITRE ATT&CK mapping, custom detection rule authorship, false-positive analysis | ✅ Complete |
 | [Day 22](./day-22-iac-security-terraform.md) | Infrastructure as Code Security (Terraform + Checkov) | Shift-left scanning, policy-as-code, S3 hardening, cross-region replication, IAM least-privilege for automation roles | ✅ Complete |
+| [Day 23](./day-23-terraform-deployment-lifecycle.md) | Terraform Deployment Lifecycle | Init/plan/apply/destroy execution, remote credential setup, root-key incident response, least-privilege IAM remediation | ✅ Complete |
 (Repository updated as training progresses)
 
 🛠️ Tools & Technologies
