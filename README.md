@@ -53,6 +53,7 @@ Rather than following tutorials passively, every lab in this repo was:
 | [Day 22](./day-22-iac-security-terraform.md) | Infrastructure as Code Security (Terraform + Checkov) | Shift-left scanning, policy-as-code, S3 hardening, cross-region replication, IAM least-privilege for automation roles | ✅ Complete |
 | [Day 23](./day-23-terraform-deployment-lifecycle.md) | Terraform Deployment Lifecycle | Init/plan/apply/destroy execution, remote credential setup, root-key incident response, least-privilege IAM remediation | ✅ Complete |
 | [Day 24](./day-24-cicd-pipeline-security.md) | CI/CD Pipeline Security (GitHub Actions) | Automated policy-as-code gate, soft_fail enforcement, PAT scoping, workflow-scope permissions | ✅ Complete |
+| [Day 25](./day-25-secrets-management.md) | Secrets Management (git-secrets + Secrets Manager) | Pre-commit secret scanning, secrets-as-data pattern, Terraform sensitive-value guard | ✅ Complete |
 (Repository updated as training progresses)
 
 🛠️ Tools & Technologies
